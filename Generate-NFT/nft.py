@@ -4,6 +4,8 @@ import numpy as np
 import time
 import os
 import random
+import inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -12,7 +14,7 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 from config import CONFIG
 
 def parse_config():
-    assets_path = 'assets'
+    assets_path = os.path.join(currentdir, 'assets')
     for layer in CONFIG:
         layer_path = os.path.join(assets_path, layer['directory'])
         traits = sorted([trait for trait in os.listdir(layer_path) if trait[0] != '.'])
@@ -40,9 +42,9 @@ def get_weighted_rarities(arr):
 
 
 def generate_single_image(filepaths, output_filename=None):
-    bg = Image.open(os.path.join('assets', filepaths[0]))
+    bg = Image.open(os.path.join(currentdir, 'assets', filepaths[0]))
     for filepath in filepaths[1:]:
-        img = Image.open(os.path.join('assets', filepath))
+        img = Image.open(os.path.join(currentdir, 'assets', filepath))
         bg.paste(img, (0,0), img)
     if output_filename is not None:
         bg.save(output_filename)
